@@ -1,2 +1,5 @@
-# Ignore node_modules directory
-src/node_modules
+# Ignore local dependencies copied from the host machine.
+node_modules
+
+# Ignore git metadata from the build context.
+.git

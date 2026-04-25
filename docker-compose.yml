@@ -1,0 +1,36 @@
+# Use Docker Compose file format version 2.4.
+version: "2.4"
+
+services:
+  # Run the web application service from the pushed Docker Hub image.
+  item-app:
+    image: ${DOCKERHUB_USERNAME}/item-app:v1
+    environment:
+      # Ensure the app always targets the MongoDB service in this Compose network.
+      DB_HOST: item-db
+    ports:
+      # Expose the application on port 80 of the host machine.
+      - "80:8080"
+    depends_on:
+      # Start item-app only after MongoDB is ready to accept connections.
+      item-db:
+        condition: service_healthy
+    restart: always
+
+  # Run the MongoDB service used by the application.
+  item-db:
+    image: mongo:3
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    volumes:
+      # Persist MongoDB data in the named volume app-db.
+      - app-db:/data/db
+    restart: always
+
+volumes:
+  # Define the named volume required by the database service.
+  app-db:
