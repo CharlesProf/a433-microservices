@@ -51,6 +51,7 @@ jobs:
   build-app-karsajobs:
     name: Build and Push Image
     runs-on: ubuntu-latest
+    environment: docker
     steps:
       - name: Checkout kode
         uses: actions/checkout@v3
