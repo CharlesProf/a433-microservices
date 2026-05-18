@@ -12,6 +12,8 @@ jobs:
   lint-dockerfile:
     name: Lint Dockerfile
     runs-on: ubuntu-latest
+    needs-: test-app
+    environment: docker
     steps:
       - name: Checkout kode
         uses: actions/checkout@v3
